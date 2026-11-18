@@ -207,3 +207,65 @@ sim_site_drift <- function (n_groups = 3, # number of treatment groups (incl. re
 }
 
 
+# simulate "true" hitting time distribution for OU process
+sim_site_HT <- function (n_groups = 3, # number of treatment groups (incl. ref)
+                            n_s_in_g = 10, # number of sites in each group (incl. ref)
+                            # can be vector of numbers, with length = n_groups
+                         t = NULL,
+                            n_t = 20, # number of time steps
+                            t_end = 20, # end time
+                            pos = c(0,0,0), # start position of sites
+                            mean = 0, # process mean (reverting to this)
+                            #sd_0 = c(.3,.3,.3), # standard error of groups initial distribution
+                            sd = c(.5,.5,.5), # standard error of groups (per step)
+                            theta = c(4,4,4), # phi params for the group
+                            pre_mean = c(0,0,0), # mean before shock
+                            shock = c(0,0,0),
+                            shock_t = c(5,5,5),
+                         N=2000
+) {
+
+  # total number of sites
+  tot_sites <- sum(n_s_in_g)*n_groups
+
+  # time vector
+  t <- seq(0,t_end,length.out=n_t)
+
+
+  # total observations
+  tot_obs <- tot_sites*length(t)
+
+  # make out-data-frame
+  sim_out <- data.frame("group"=numeric(),
+                        "value"=numeric())
+
+  # set mean for time series
+
+
+  for (g in 1:n_groups) {
+    # means
+    if (shock[g]==0) {
+      mn <- pos[g]*exp(-1/theta[g]*t)
+    } else {
+      mn <- c(rep(pre_mean[g], length(t[t<shock_t[g]])),
+              (pre_mean[g] + shock[g])*exp(-1/theta[g]*t[1:(length(t)-length(t[t<shock_t[g]]))])
+      )
+    }
+    # varcov for ou
+    vc <- as.matrix(exp(-1/theta[g]*dist(t)))
+    diag(vc) <- 1
+    vc <- sd[g]*vc
+    # simulate ou trajectories for group
+    g_sims <- mnormt::rmnorm(N,mn,vc)
+    for (r in 1:nrow(g_sims)) {
+      hit_index <- as.numeric(which(g_sims[r,] >= -sd[g] & g_sims[r,] <= sd[g]))[1]
+      sim_out <- rbind(sim_out,
+                       data.frame("group"=g,
+                                  "value"=hit_index))
+
+    }
+  }
+  sim_out
+}
+
+
