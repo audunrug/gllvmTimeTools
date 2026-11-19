@@ -19,7 +19,7 @@ sim_HT <- function(object, #gllvm
                    group_names, # names of treatment groups
                    cc_init, # canonical coefficient start values to predict for (indices)
                    cc_LTI=NULL, # canonical coefficient long-term intercept (indices)
-                   cc_ref=NULL,
+                   cc_ref=0,
                    rho, # rho (indices)
                    stdevs = 1,
                    N=2000 # number of runs
@@ -55,9 +55,7 @@ sim_HT <- function(object, #gllvm
       diag(mvsd) <- diag(mvsd) + 1
       temp <- temp + MASS::mvrnorm(1,rep(0,length(rangeX)),sd_lv*mvsd)
 
-      if (is.null(cc_ref)) {
-        cc_ref <- 0
-      } else {
+      if (cc_ref !=0) {
         cc_ref <- sim_full[names(sim_full)=="b_lv"][cc_ref[i]]
       }
 
