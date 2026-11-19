@@ -19,7 +19,7 @@ sim_HT <- function(object, #gllvm
                    group_names, # names of treatment groups
                    cc_init, # canonical coefficient start values to predict for (indices)
                    cc_LTI=NULL, # canonical coefficient long-term intercept (indices)
-                   cc_ref=FALSE,
+                   cc_ref=NULL,
                    rho, # rho (indices)
                    stdevs = 1,
                    N=2000 # number of runs
