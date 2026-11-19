@@ -76,7 +76,7 @@ simulate_system  <- function(num_lv = 1,
   if (length(sim_resp_par[[1]]) != 1){
     resp_df <- do.call(sp_params, sim_resp_par[[1]])
   } else {
-    resp_df <- sim_sp_resp()
+    resp_df <- sp_params()
   }
   resp_df$lv <- 1 # for first latent variable
 
@@ -88,7 +88,7 @@ simulate_system  <- function(num_lv = 1,
         df_lv$lv <- l
         resp_df <- rbind(resp_df, df_lv)
       } else {
-        df_lv <- sim_sp_resp()
+        df_lv <- sp_params()
         df_lv$lv <- l
         resp_df <- rbind(resp_df, df_lv)
       }
@@ -261,7 +261,7 @@ sim_site_HT <- function (n_groups = 3, # number of treatment groups (incl. ref)
       hit_index <- as.numeric(which(g_sims[r,] >= -sd[g] & g_sims[r,] <= sd[g]))[1]
       sim_out <- rbind(sim_out,
                        data.frame("group"=g,
-                                  "value"=hit_index))
+                                  "value"=t[hit_index]))
 
     }
   }
