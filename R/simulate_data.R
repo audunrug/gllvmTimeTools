@@ -254,7 +254,7 @@ sim_site_HT <- function (n_groups = 3, # number of treatment groups (incl. ref)
     # varcov for ou
     vc <- as.matrix(exp(-1/theta[g]*dist(t)))
     diag(vc) <- 1
-    vc <- sd[g]*vc
+    vc <- (sd[g]^2)*vc
     # simulate ou trajectories for group
     g_sims <- mnormt::rmnorm(N,mn,vc)
     for (r in 1:nrow(g_sims)) {
