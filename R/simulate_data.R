@@ -185,7 +185,7 @@ sim_site_drift <- function (n_groups = 3, # number of treatment groups (incl. re
     # varcov for ou
     vc <- as.matrix(exp(-1/theta[g]*dist(t)))
     diag(vc) <- 1
-    vc <- sd[g]*vc
+    vc <- (sd[g]^2)*vc
     # simulate ou trajectories for group
     if (length(n_s_in_g) == 1) {
       g_sims <- mnormt::rmnorm(n_s_in_g,mn,vc)

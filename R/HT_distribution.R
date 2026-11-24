@@ -43,12 +43,12 @@ sim_HT <- function(object, #gllvm
       } else {
         cc_LTI_t <- sim_full[names(sim_full)=="b_lv"][cc_LTI[i]]
       }
-      if (constant_rho) {
-        rho_t <- object$TMBfn$par[names(sim_full)=="rho_lvc"][rho[i]]
-        rho_t <- exp(-1/(exp(rho_t)))
-      } else {
+      # if (constant_rho) {
+      #   rho_t <- object$TMBfn$par[names(sim_full)=="rho_lvc"][rho[i]]
+      #   rho_t <- exp(-1/(exp(rho_t)))
+      # } else {
         rho_t <- exp(-1/(exp(sim_full[names(sim_full)=="rho_lvc"][rho[i]])))
-      }
+      # }
 
       sd_lv <- sim_full[names(sim_full)=="sigmaLV"]
 
@@ -60,7 +60,7 @@ sim_HT <- function(object, #gllvm
 
       mvsd <- as.matrix(rho_t^dist(rangeX,diag=T,upper=T))
       diag(mvsd) <- diag(mvsd) + 1
-      temp <- temp + MASS::mvrnorm(1,rep(0,length(rangeX)),sd_lv*mvsd)
+      temp <- temp + MASS::mvrnorm(1,rep(0,length(rangeX)),(sd_lv^2)*mvsd)
 
       if (cc_ref !=0) {
         cc_ref <- sim_full[names(sim_full)=="b_lv"][cc_ref[i]]
