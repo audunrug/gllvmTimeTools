@@ -20,6 +20,7 @@ sim_HT <- function(object, #gllvm
                    cc_init, # canonical coefficient start values to predict for (indices)
                    cc_LTI=NULL, # canonical coefficient long-term intercept (indices)
                    cc_ref=0,
+                   constant_rho=F,
                    rho, # rho (indices)
                    stdevs = 1,
                    N=2000 # number of runs
@@ -42,7 +43,13 @@ sim_HT <- function(object, #gllvm
       } else {
         cc_LTI_t <- sim_full[names(sim_full)=="b_lv"][cc_LTI[i]]
       }
-      rho_t <- exp(-1/(exp(sim_full[names(sim_full)=="rho_lvc"][rho[i]])))
+      if (constant_rho) {
+        rho_t <- object$TMBfn$par[names(sim_full)=="rho_lvc"][rho[i]]
+        rho_t <- exp(-1/(exp(rho_t)))
+      } else {
+        rho_t <- exp(-1/(exp(sim_full[names(sim_full)=="rho_lvc"][rho[i]])))
+      }
+
       sd_lv <- sim_full[names(sim_full)=="sigmaLV"]
 
       if (is.null(cc_LTI_t)) {
