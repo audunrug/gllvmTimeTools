@@ -50,7 +50,7 @@ sim_HT <- function(object, #gllvm
         rho_t <- exp(-1/(exp(sim_full[names(sim_full)=="rho_lvc"][rho[i]])))
       # }
 
-      sd_lv <- sim_full[names(sim_full)=="sigmaLV"]
+      sd_lv <- abs(sim_full[names(sim_full)=="sigmaLV"])
 
       if (is.null(cc_LTI_t)) {
         temp <- cc_init_t*(rho_t^(rangeX))
