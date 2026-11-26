@@ -28,7 +28,7 @@ marginal_CI <- function(object, #gllvm
     newobject <- gllvm:::perturb.gllvm(object, params, n)
     margs <- gllvm::getLV(newobject,type="marginal")
     df_temp <- data.frame(u=1:rws)
-    for (i in 1:mod_coral$num.lv.c){
+    for (i in 1:object$num.lv.c){
       df_temp[[paste0("LV_",i)]] <- margs[,i]
     }
     df <- df |> rbind(df_temp)
