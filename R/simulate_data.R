@@ -173,13 +173,17 @@ sim_site_drift <- function (n_groups = 3, # number of treatment groups (incl. re
   )
 
   # set mean for time series
+  if (length(mean) == 1) {
+    mean <- rep(mean,n_groups)
+  }
+
   for (g in 1:n_groups) {
     # means
     if (shock[g]==0) {
-      mn <- pos[g]*exp(-1/theta[g]*t)
+      mn <- pos[g]*exp(-1/theta[g]*t) + mean[g]
     } else {
       mn <- c(rep(pre_mean[g], length(t[t<shock_t[g]])),
-              (pre_mean[g] + shock[g])*exp(-1/theta[g]*t[1:(length(t)-length(t[t<shock_t[g]]))])
+              (pre_mean[g] + shock[g])*exp(-1/theta[g]*t[1:(length(t)-length(t[t<shock_t[g]]))] + mean[g])
       )
     }
     # varcov for ou
