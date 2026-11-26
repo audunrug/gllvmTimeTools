@@ -21,7 +21,7 @@ marginal_CI <- function(object, #gllvm
   params <- gllvm:::simulate_params_gllvm(object, N, 1, level=0)
   df <- data.frame(u=numeric())
   # make columns
-  for (i in 1:mod_coral$num.lv.c) {df[[paste0("LV_",i)]] <- numeric()}
+  for (i in 1:object$num.lv.c) {df[[paste0("LV_",i)]] <- numeric()}
 
   rws <- nrow(object$y)
   for(n in 1:N){
